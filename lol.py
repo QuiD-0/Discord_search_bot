@@ -19,8 +19,8 @@ def search(message):
     url = 'https://www.op.gg/summoner/userName='+nickname
     response = requests.get(url)
     if response.status_code == 200:
-        html = response.text
-        soup = BeautifulSoup(html, 'html.parser',from_encoding='utf-8')
+        html = response.content.decode('utf-8','replace')
+        soup = BeautifulSoup(html, 'html.parser')
 
         try : 
             if soup.select_one('#SummonerLayoutContent > div > div > div > div > div > div.TierRank').text:

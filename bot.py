@@ -34,4 +34,9 @@ async def on_message(message):
             embed,image = loa.search(message)
             await message.channel.send(embed=embed,file=image)
 
+    if message.content.startswith('!모험섬'):
+        embed,image=loa.adventure_island()
+        await message.channel.send(embed=embed,file=image)
+
+
 client.run(token)
