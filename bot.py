@@ -1,6 +1,6 @@
 import asyncio
 import discord
-import lol
+import lol,loa
 
 client = discord.Client()
 
@@ -21,13 +21,17 @@ async def on_message(message):
 
     if message.content.startswith('!롤'):
         if len(message.content.split(' '))!=1:
-            msg=lol.search(message)
-            if msg:
-                for embed in msg:
+            msg,image = lol.search(message)
+            for embed in msg:
+                if image:
+                    await message.channel.send(embed=embed,file=image)
+                    image=None
+                else:
                     await message.channel.send(embed=embed)
 
     if message.content.startswith('!로아'):
-        pass
-    
+        if len(message.content.split(' '))!=1:
+            embed,image = loa.search(message)
+            await message.channel.send(embed=embed,file=image)
 
 client.run(token)
