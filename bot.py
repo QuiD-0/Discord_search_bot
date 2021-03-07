@@ -19,6 +19,13 @@ async def on_message(message):
     if message.author.bot:
         return None
 
+    if message.content.startswith('!help'):
+        embed = discord.Embed(title='입력 가능한 명령어', description="추가 문의는 재웅에게!")
+        embed.add_field(name="롤 전적", value='!롤 [닉네임]', inline=False)
+        embed.add_field(name="로아 정보", value='!로아 [닉네임]', inline=False)
+        embed.add_field(name="로아 모험섬", value='!모험섬', inline=False)
+        await message.channel.send(embed=embed)
+
     if message.content.startswith('!롤'):
         if len(message.content.split(' '))!=1:
             msg,image = lol.search(message)
