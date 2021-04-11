@@ -17,10 +17,9 @@ def search(message):
         html = response.content.decode('utf-8','replace')
         soup = BeautifulSoup(html, 'html.parser')
         try :
-            lv_nick=soup.select_one('div.pl-2.pr-2.pt-0.pb-0.m-0 > p > span.bg-theme-8.rounded.shadow-sm.text-theme-1.tfs18 > strong').text
             name=soup.find_all('span',{'class':'badge badge-pill bg-theme-8 text-theme-1 tfs14 w500'})
             info=soup.find_all('span',{'class':'text-theme-0 tfs14'})
-            embed = discord.Embed(title=lv_nick,url=url, color=0x000000)
+            embed = discord.Embed(title=nickname,url=url, color=0x000000)
             embed.set_thumbnail(url="attachment://image.png")
             for i in range(0,6):
                 embed.add_field(name=name[i].get_text(), value=info[i].get_text(), inline=True)
@@ -42,11 +41,10 @@ def search(message):
                 embed.add_field(name=point_name[i], value=points[i], inline=True)
         except:
             embed = discord.Embed(title='검색 결과 없음', description=nickname)
-            return embed,None
-
+            image=None
     else : 
         embed = discord.Embed(title='404 NOT FOUND', description='잠시후 다시 시도해주세요.')
-        return embed,None
+        image=None
     
     return embed,image
 
@@ -63,11 +61,9 @@ def adventure_island():
         island=soup.find_all('p',{'class':'text-theme-0 tfs15 p-0 m-0'})
         islands=[]
         desc=[]
-        print(island)
         for i in island:
             islands.append(i.find('strong').get_text())
             desc.append(i.find('span').get_text())
-        print(islands)
         time=soup.select_one('span.text-theme-0.tfs14').get_text()
         embed = discord.Embed(title="오늘의 모험섬",description=time,url=url, color=0x000000)
         embed.set_thumbnail(url="attachment://image.png")
