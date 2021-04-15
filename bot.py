@@ -7,6 +7,7 @@ client = discord.Client()
 file=data = open('token.txt')
 token=file.readline()
 
+
 @client.event
 async def on_ready():
     print("다음으로 로그인합니다")
@@ -14,8 +15,10 @@ async def on_ready():
     print(client.user.id)
     print("================")
 
-def whosearch(message,s):
+
+def who_search(message, s):
     print(f'{message.author}님 {s} 확인')
+
 
 @client.event
 async def on_message(message):
@@ -30,26 +33,26 @@ async def on_message(message):
         await message.channel.send(embed=embed)
 
     if message.content.startswith('!롤'):
-        whosearch(message, '롤 전적')
+        who_search(message, '롤 전적')
         if len(message.content.split(' '))!=1:
-            msg,image = lol.search(message)
+            msg, image = lol.search(message)
             for embed in msg:
                 if image:
-                    await message.channel.send(embed=embed,file=image)
+                    await message.channel.send(embed=embed, file=image)
                     image=None
                 else:
                     await message.channel.send(embed=embed)
 
     if message.content.startswith('!로아'):
-        whosearch(message, '로아 전적')
+        who_search(message, '로아 전적')
         if len(message.content.split(' '))!=1:
-            embed,image = loa.search(message)
-            await message.channel.send(embed=embed,file=image)
+            embed, image = loa.search(message)
+            await message.channel.send(embed=embed, file=image)
 
     if message.content.startswith('!모험섬'):
-        whosearch(message, '모험섬')
-        embed,image=loa.adventure_island()
-        await message.channel.send(embed=embed,file=image)
+        who_search(message, '모험섬')
+        embed, image=loa.adventure_island()
+        await message.channel.send(embed=embed, file=image)
 
 
 client.run(token)
