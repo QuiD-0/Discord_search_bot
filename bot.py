@@ -1,6 +1,7 @@
-import asyncio
 import discord
-import lol, loa
+import discord
+
+import loa
 
 client = discord.Client()
 
@@ -14,7 +15,7 @@ async def on_ready():
     fp = open(pfp_path, 'rb')
     pfp = fp.read()
     await client.user.edit(avatar=pfp)
-    
+
     print("다음으로 로그인합니다")
     print(client.user.name)
     print(client.user.id)
@@ -48,7 +49,7 @@ async def on_message(message):
     #             else:
     #                 await message.channel.send(embed=embed)
 
-    if message.content.startswith('!쌀'):
+    elif message.content.startswith('!쌀'):
         who_search(message, '쌀')
         if len(message.content.split(' ')) != 1:
             embed, image = loa.calc(message)
