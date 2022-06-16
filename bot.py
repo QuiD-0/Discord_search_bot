@@ -10,6 +10,11 @@ token = file.readline()
 
 @client.event
 async def on_ready():
+    pfp_path = "wallhaven-g7z7ld.jpg"
+    fp = open(pfp_path, 'rb')
+    pfp = fp.read()
+    await client.user.edit(avatar=pfp)
+    
     print("다음으로 로그인합니다")
     print(client.user.name)
     print(client.user.id)
