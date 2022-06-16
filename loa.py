@@ -12,15 +12,14 @@ def search(message):
     channel = message.channel
     a = message.content.split(' ')  # a=['!안녕','다음','텍스트']
     nickname = a[1]
-    url = 'https://loawa.com/char/' + nickname
+    url = 'https://www.mgx.kr/lostark/character/?character_name=' + nickname
     response = requests.get(url, headers={'Content-Type': 'text/html; charset=UTF-8',
                                           'Cookie': '__cflb=0H28vwov4WNATuDxs8akb4z2y1B5zpZC5QPzYxABxeq',
                                           'Accept': '*/*',
                                           'Connection': 'keep-alive',
                                           "User-Agent": 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36',
                                           'Accept-Encoding': 'gzip, deflate, br',
-                                          'Cache-Control': 'no-cache',
-                                          'Host': 'loawa.com'})
+                                          'Cache-Control': 'no-cache'})
     if response.status_code == 200:
         html = response.content.decode('utf-8', 'replace')
         soup = BeautifulSoup(html, 'html.parser')
@@ -37,7 +36,6 @@ def search(message):
             gack_active = soup.find_all('div', {'class': 'engrave-item col-12 col-md-6 has-tooltip'})
             # gackin_tag = soup.find_all('a', {'class': 'btn-theme-4 text-right rounded link-theme-4 p-1'})
             gackin.append(gack_active.get_text())
-            print(gack_active)
             if gack_active:
                 # for tag in gack_active:
                 #     gackin.append(tag.get_text())
