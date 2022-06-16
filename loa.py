@@ -13,9 +13,17 @@ def search(message):
     a = message.content.split(' ')  # a=['!안녕','다음','텍스트']
     nickname = a[1]
     url = 'https://loawa.com/char/' + nickname
-    response = requests.get(url)
+    response = requests.get(url, headers={'Content-Type': 'text/html; charset=UTF-8',
+              'Cookie':'__cflb=0H28vwov4WNATuDxs8akb4z2y1B5zpZC5QPzYxABxeq',
+               'Accept':'*/*',
+               'Connection':'keep-alive',
+               "User-Agent":'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36',
+               'Accept-Encoding':'gzip, deflate, br',
+              'Cache-Control':'no-cache',
+            'Host':'loawa.com'})
     if response.status_code == 200:
         html = response.content.decode('utf-8', 'replace')
+        print(html)
         soup = BeautifulSoup(html, 'html.parser')
         try:
             name = soup.find_all('span', {'class': 'badge badge-pill bg-theme-8 text-theme-1 tfs14 w500'})
