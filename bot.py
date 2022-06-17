@@ -11,10 +11,10 @@ token = file.readline()
 
 @client.event
 async def on_ready():
-    pfp_path = "wallhaven-g7z7ld.jpg"
-    fp = open(pfp_path, 'rb')
-    pfp = fp.read()
-    await client.user.edit(avatar=pfp)
+    # pfp_path = "wallhaven-g7z7ld.jpg"
+    # fp = open(pfp_path, 'rb')
+    # pfp = fp.read()
+    # await client.user.edit(avatar=pfp)
 
     print("다음으로 로그인합니다")
     print(client.user.name)
@@ -57,7 +57,12 @@ async def on_message(message):
 
     elif message.content.startswith('!오늘'):
         who_search(message, '오늘')
-        embed, image = loa.content()
+        embed, image = loa.content(0)
+        await message.channel.send(embed=embed, file=image)
+
+    elif message.content.startswith('!내일'):
+        who_search(message, '내일')
+        embed, image = loa.content(1)
         await message.channel.send(embed=embed, file=image)
 
     elif message.content.startswith('!'):

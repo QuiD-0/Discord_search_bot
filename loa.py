@@ -1,6 +1,7 @@
+from pytz import timezone
+from datetime import datetime
 import urllib.request
 from collections import defaultdict
-from datetime import date
 
 import discord
 import requests
@@ -105,17 +106,21 @@ def calc(message):
     return embed, image
 
 
-def content():
-    day = date.today().weekday()
+def content(flag):
+    day = datetime.now(timezone('Asia/Seoul')).weekday()
+    word = ["오늘", "내일"]
+    if flag:
+        day += 1
+        day %= 7
     days = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
     contents = {0: ["카오스 케이트"], 1: ["필드보스", "유령선"], 2: [], 3: ["카오스 게이트", "유령선"], 4: ["필드 보스"], 5: ["유령선"],
                 6: ["필드 보스"]}
     image = discord.File("explain.png", filename="image.png")
-    embed = discord.Embed(title="오늘의 컨텐츠", color=0x000000)
+    embed = discord.Embed(title=word[flag] + "의 컨텐츠", color=0x000000)
     embed.set_thumbnail(url="attachment://image.png")
     embed.add_field(name=days[day],
                     value="오늘은 컨텐츠가 없어요!" if len(contents[day]) == 0 else ' '.join(contents[day]), inline=False)
-    return embed,image
+    return embed, image
 
 
 def adventure_island():
