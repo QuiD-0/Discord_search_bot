@@ -55,6 +55,10 @@ async def on_message(message):
             embed, image = loa.calc(message)
             await message.channel.send(embed=embed, file=image)
 
+    elif message.content.startswith('!오늘'):
+        who_search(message, '오늘')
+        embed, image = loa.content()
+        await message.channel.send(embed=embed, file=image)
 
     elif message.content.startswith('!'):
         who_search(message, '로아 전적')

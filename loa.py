@@ -1,9 +1,14 @@
 import urllib.request
+from collections import defaultdict
+from datetime import date
 
 import discord
 import requests
 from bs4 import BeautifulSoup
 from lxml import etree
+
+shorcut = defaultdict()
+shorcut["전서협"] = "전국서머너홍보협회"
 
 
 def search(message):
@@ -13,6 +18,9 @@ def search(message):
     channel = message.channel
     a = message.content.split('!')  # a=['!안녕','다음','텍스트']
     nickname = a[1]
+    if nickname in shorcut.keys():
+        nickname = shorcut[nickname]
+
     url = 'https://www.mgx.kr/lostark/character/?character_name=' + nickname
     response = requests.get(url, headers={'Content-Type': 'text/html; charset=UTF-8',
                                           'Cookie': '__cflb=0H28vwov4WNATuDxs8akb4z2y1B5zpZC5QPzYxABxeq',
@@ -79,14 +87,35 @@ def search(message):
 def calc(message):
     a = message.content.split(' ')
     price = float(a[1])
+    if price > 100000:
+        embed = discord.Embed(title='너무 큰 금액 아닌가요...?!', description='잠시후 다시 시도해 주세요.')
+        image = None
+        return embed, image;
     four = price * 0.6478
     eight = price * 0.7556
     image = discord.File("explain.png", filename="image.png")
     embed = discord.Embed(title="분배금 쌀먹", color=0x000000)
     embed.set_thumbnail(url="attachment://image.png")
-    embed.add_field(name="4인 기준", value=str(int(four)) + " 골드", inline=True)
-    embed.add_field(name="8인 기준", value=str(int(eight)) + " 골드", inline=True)
+    embed.add_field(name="4인 기준",
+                    value="입찰 추천가 : " + str(int(four)) + " 골드" + "\t손익 분기점 : " + str(int(four * 1.1)) + " 골드",
+                    inline=False)
+    embed.add_field(name="8인 기준",
+                    value="입찰 추천가 : " + str(int(eight)) + " 골드" + "\t손익 분기점 : " + str(int(eight * 1.1)) + " 골드",
+                    inline=False)
     return embed, image
+
+
+def content():
+    day = date.today().weekday()
+    days = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
+    contents = {0: ["카오스 케이트"], 1: ["필드보스", "유령선"], 2: [], 3: ["카오스 게이트", "유령선"], 4: ["필드 보스"], 5: ["유령선"],
+                6: ["필드 보스"]}
+    image = discord.File("explain.png", filename="image.png")
+    embed = discord.Embed(title="오늘의 컨텐츠", color=0x000000)
+    embed.set_thumbnail(url="attachment://image.png")
+    embed.add_field(name=days[day],
+                    value="오늘은 컨텐츠가 없어요!" if len(contents[day]) == 0 else ' '.join(contents[day]), inline=False)
+    return embed,image
 
 
 def adventure_island():
