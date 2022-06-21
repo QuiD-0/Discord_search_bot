@@ -123,6 +123,33 @@ def content(flag):
     return embed, image
 
 
+def get_notice():
+    image = discord.File("explain.png", filename="image.png")
+    embed = discord.Embed(title="최신 공지사항", color=0x000000)
+    embed.set_thumbnail(url="attachment://image.png")
+    url = 'https://lostark.game.onstove.com/Main'
+    response = requests.get(url, headers={'Content-Type': 'text/html; charset=UTF-8',
+                                          'Cookie': '__cflb=0H28vwov4WNATuDxs8akb4z2y1B5zpZC5QPzYxABxeq',
+                                          'Accept': '*/*',
+                                          'Connection': 'keep-alive',
+                                          "User-Agent": 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36',
+                                          'Accept-Encoding': 'gzip, deflate, br',
+                                          'Cache-Control': 'no-cache'})
+    if response.status_code == 200:
+        html = response.content.decode('utf-8', 'replace')
+        soup = BeautifulSoup(html, 'html.parser')
+        notices = soup.select('span.main-news__title')
+        notices_link = soup.select('a:has(span.main-news__title)')
+        print(notices_link)
+        for i in range(len(notices)):
+            embed.add_field(name=str(i + 1) + "번째 공지",
+                            value='[' + str(notices[i].get_text()) + '](' + 'https://lostark.game.onstove.com/' + str(
+                                notices_link[i]["href"]) + ')',
+                            inline=False)
+
+    return embed, image
+
+
 def adventure_island():
     urllib.request.urlretrieve("https://upload3.inven.co.kr/upload/2021/01/27/bbs/i8293549818.png", "explain.png")
     image = discord.File("explain.png", filename="image.png")

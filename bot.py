@@ -38,6 +38,7 @@ async def on_message(message):
         embed.add_field(name="로아 분배금", value='!쌀', inline=False)
         embed.add_field(name="오늘의 컨텐츠", value='!오늘', inline=False)
         embed.add_field(name="내일의 컨텐츠", value='!내일', inline=False)
+        embed.add_field(name="최신 공지사항", value='!공지', inline=False)
         await message.channel.send(embed=embed)
 
     # if message.content.startswith('!롤'):
@@ -65,6 +66,11 @@ async def on_message(message):
     elif message.content.startswith('!내일'):
         who_search(message, '내일')
         embed, image = loa.content(1)
+        await message.channel.send(embed=embed, file=image)
+
+    elif message.content.startswith('!공지'):
+        who_search(message, '공지')
+        embed, image = loa.get_notice()
         await message.channel.send(embed=embed, file=image)
 
     elif message.content.startswith('!'):
