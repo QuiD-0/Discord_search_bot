@@ -113,8 +113,8 @@ def content(flag):
         day += 1
         day %= 7
     days = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
-    contents = {0: ["카오스 케이트"], 1: ["필드보스", "유령선"], 2: [], 3: ["카오스 게이트", "유령선"], 4: ["필드 보스"], 5: ["유령선"],
-                6: ["필드 보스"]}
+    contents = {0: ["카오스 게이트"], 1: ["필드 보스", "유령선"], 2: [], 3: ["카오스 게이트", "유령선"], 4: ["필드 보스"], 5: ["카오스 게이트", "유령선"],
+                6: ["필드 보스", "카오스 게이트", "유령선"]}
     image = discord.File("explain.png", filename="image.png")
     embed = discord.Embed(title=word[flag] + "의 컨텐츠", color=0x000000)
     embed.set_thumbnail(url="attachment://image.png")
