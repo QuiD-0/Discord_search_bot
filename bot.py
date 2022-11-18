@@ -1,7 +1,7 @@
 import discord
-import discord
 
 import loa
+import ai
 
 client = discord.Client()
 
@@ -72,7 +72,12 @@ async def on_message(message):
         who_search(message, '공지')
         embed, image = loa.get_notice()
         await message.channel.send(embed=embed, file=image)
-
+        
+    elif message.content.startswith('!ai'):
+        who_search(message, '로아 전적')
+        embed, image = ai.search(message)
+        await message.channel.send(embed=embed, file=image)
+        
     elif message.content.startswith('!'):
         who_search(message, '로아 전적')
         embed, image = loa.search(message)
