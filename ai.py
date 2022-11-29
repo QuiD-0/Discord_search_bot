@@ -10,7 +10,7 @@ def search(message):
     cmd = " ".join(msg[1:])
     
     response = openai.Completion.create(
-    model="text-davinci-002",
+    model="text-davinci-003",
     prompt=cmd,
     temperature=0.7,
     max_tokens=30,
