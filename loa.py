@@ -40,8 +40,11 @@ def search(message):
     gackins = engravings.json()
     points = collectibles.json()
     
-    urllib.request.urlretrieve(res['CharacterImage'], "explain.png")
-    image = discord.File("explain.png", filename="image.png")
+    try:
+        urllib.request.urlretrieve(res['CharacterImage'], "explain.png")
+        image = discord.File("explain.png", filename="image.png")
+    except:
+        image = None
     
     if profiles.status_code == 200:
         try:
