@@ -52,7 +52,7 @@ async def on_message(message):
     #             else:
     #                 await message.channel.send(embed=embed)
 
-    elif message.content.startswith('!쌀'):
+    elif message.content.startswith('!쌀') or message.content.startswith('!Tkf'):
         who_search(message, '쌀')
         if len(message.content.split(' ')) != 1:
             embed, image = loa.calc(message)
