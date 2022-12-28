@@ -74,7 +74,7 @@ async def on_message(message):
         await message.channel.send(embed=embed, file=image)
         
     elif message.content.startswith('!ai'):
-        who_search(message, '로아 전적')
+        who_search(message, 'ai')
         embed, image = ai.search(message)
         await message.channel.send(embed=embed, file=image)
         

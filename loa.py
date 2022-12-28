@@ -11,70 +11,79 @@ from lxml import etree
 shorcut = defaultdict()
 shorcut["전서협"] = "전국서머너홍보협회"
 
+file = data = open('loaOpenApiKey.txt')
+apiKey = file.readline()
+
 
 def search(message):
-    urllib.request.urlretrieve("https://upload3.inven.co.kr/upload/2021/01/27/bbs/i8293549818.png", "explain.png")
-    image = discord.File("explain.png", filename="image.png")
-
     channel = message.channel
     a = message.content.split('!')  # a=['!안녕','다음','텍스트']
     nickname = a[1]
     if nickname in shorcut.keys():
         nickname = shorcut[nickname]
 
-    url = 'https://www.mgx.kr/lostark/character/?character_name=' + nickname
-    response = requests.get(url, headers={'Content-Type': 'text/html; charset=UTF-8',
-                                          'Cookie': '__cflb=0H28vwov4WNATuDxs8akb4z2y1B5zpZC5QPzYxABxeq',
-                                          'Accept': '*/*',
-                                          'Connection': 'keep-alive',
-                                          "User-Agent": 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36',
-                                          'Accept-Encoding': 'gzip, deflate, br',
-                                          'Cache-Control': 'no-cache'})
-    if response.status_code == 200:
-        html = response.content.decode('utf-8', 'replace')
-        soup = BeautifulSoup(html, 'html.parser')
-        dom = etree.HTML(str(soup))
+    url = 'https://developer-lostark.game.onstove.com/armories/characters/'+ nickname + '/profiles'
+    profiles = requests.get(url, headers={'accept': 'application/json',
+                                          'authorization': 'bearer '+ apiKey})
+    
+    url = 'https://developer-lostark.game.onstove.com/armories/characters/'+ nickname + '/engravings'
+    engravings = requests.get(url, headers={'accept': 'application/json',
+                                          'authorization': 'bearer '+ apiKey})
+    
+    url = 'https://developer-lostark.game.onstove.com/armories/characters/'+ nickname + '/collectibles'
+    collectibles = requests.get(url, headers={'accept': 'application/json',
+                                          'authorization': 'bearer '+ apiKey})
+    
+    characterUrl = 'https://lostark.game.onstove.com/Profile/Character/' + nickname
+    
+    res = profiles.json()
+    gackins = engravings.json()
+    points = collectibles.json()
+    
+    urllib.request.urlretrieve(res['CharacterImage'], "explain.png")
+    image = discord.File("explain.png", filename="image.png")
+    
+    if profiles.status_code == 200:
         try:
             # 레벨
-            level = dom.xpath('//*[@id="character_info"]/div[1]/div[5]/div[2]/text()')
-            embed = discord.Embed(title=str(level[0]) + " " + str(nickname), url=url, color=0x000000)
-            embed.set_thumbnail(url="attachment://image.png")
+            level = res['CharacterLevel']
+            embed = discord.Embed(title= "Level."+ str(level) + " " + str(nickname), url=characterUrl, color=0x3366ff)
             # 아이템 레벨
-            itemLevel = dom.xpath('//*[@id="character_info"]/div[1]/div[7]/div[2]/text()')
-            embed.add_field(name="아이템 레벨", value=itemLevel[0], inline=True)
+            itemLevel = res['ItemMaxLevel']
+            embed.add_field(name="아이템 레벨", value=itemLevel, inline=True)
             # 클래스
-            userClass = dom.xpath('//*[@id="character_info"]/div[1]/div[2]/div[2]/text()')
-            embed.add_field(name="클래스", value=userClass[0], inline=True)
+            userClass = res['CharacterClassName']
+            embed.add_field(name="클래스", value=userClass, inline=True)
             # 길드
-            guild = dom.xpath('//*[@id="character_info"]/div[1]/div[3]/div[2]/text()')
-            embed.add_field(name="길드", value=guild[0], inline=True)
+            guild = res['GuildName']
+            embed.add_field(name="길드", value=guild, inline=True)
             # 서버
-            server = dom.xpath('//*[@id="character_info"]/div[1]/div[2]/div[3]/text()')
-            embed.add_field(name="서버", value=server[0], inline=True)
+            server = res['ServerName']
+            embed.add_field(name="서버", value=server, inline=True)
             # 영지
-            town = dom.xpath('//*[@id="character_info"]/div[1]/div[8]/div[2]/text()')
-            embed.add_field(name="영지", value=town[0], inline=True)
+            town = res['TownName']
+            embed.add_field(name="영지", value=town, inline=True)
             # 원정대
-            fellowship = dom.xpath('//*[@id="character_info"]/div[1]/div[4]/div[2]/text()')
-            embed.add_field(name="원정대", value=fellowship[0], inline=True)
-            # 기본 특성
-            power = dom.xpath('//*[@id="character_info"]/div[4]/div[2]/div[1]/div[1]/div[2]/div[1]/div[2]/text()')
-            hp = dom.xpath('//*[@id="character_info"]/div[4]/div[2]/div[1]/div[1]/div[2]/div[2]/div[2]/text()')
-            embed.add_field(name="기본 특성", value="공격력" + " " + str(power[0]) + '\n' + "최대 생명력" + " " + str(hp[0]),
-                            inline=False)
-            # 각인
-            gackin_name = soup.select('div.carving div.carving_category')
-            gackin_level = soup.select('div.carving div.carving_level')
+            fellowship = res['ExpeditionLevel']
+            embed.add_field(name="원정대", value=fellowship, inline=True)
             final_gackin = []
-            for i in range(len(gackin_name)):
-                gackin = gackin_name[i].get_text() + " " + gackin_level[i].get_text()
-                final_gackin.append(gackin)
-            embed.add_field(name="각인 효과", value='\n'.join(final_gackin), inline=False)
+            for gackin in gackins['Effects']:
+                final_gackin.append(gackin['Name'])
+            embed.add_field(name="각인 효과", value='\n'.join(final_gackin), inline=True)
+    
+             # 기본 특성
+            status = {}
+            for stat in res['Stats']:
+                if(stat['Type'] in ["치명","특화","신속"]):
+                    status[stat['Type']] = stat['Value']
+            embed.add_field(name="기본 특성", value="치명" + " " +status["치명"] + '\n' + "특화" + " " + status["특화"]+ '\n' + "신속" + " " + status["신속"] ,
+                            inline=True)
+            #공백
+            embed.add_field(name="ㅤ", value='ㅤ', inline=False)
+            
             # 수집형 포인트
-            points = soup.select('div.point_number')
-            point_name = ['섬의 마음', '오르페우스의 별', '거인의 심장', '미술품', '모코코', '모험물', '이그네아의증표', '세계수의 잎']
-            for i in range(8):
-                embed.add_field(name=point_name[i], value=points[i].get_text(), inline=True)
+            for collect in points:
+                embed.add_field(name=collect['Type'], value=str(collect['Point']) + ' / ' + str(collect['MaxPoint']), inline=True)
         except:
             embed = discord.Embed(title='무언가... 잘못 됐어요', description='잠시후 다시 시도해 주세요.')
             image = None
