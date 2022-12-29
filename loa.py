@@ -39,18 +39,13 @@ def search(message):
     res = profiles.json()
     gackins = engravings.json()
     points = collectibles.json()
-    
-    try:
-        urllib.request.urlretrieve(res['CharacterImage'], "explain.png")
-        image = discord.File("explain.png", filename="image.png")
-    except:
-        image = None
-    
+    image = None
     if profiles.status_code == 200:
         try:
             # 레벨
             level = res['CharacterLevel']
             embed = discord.Embed(title= "Level."+ str(level) + " " + str(nickname), url=characterUrl, color=0x3366ff)
+            embed.set_image(url = res['CharacterImage'])
             # 아이템 레벨
             itemLevel = res['ItemMaxLevel']
             embed.add_field(name="아이템 레벨", value=itemLevel, inline=True)
