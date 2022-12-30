@@ -32,7 +32,7 @@ def search(message):
     return embed, None
 
 
-def kogpt_api(prompt):
+def kogpt_api(prompt, max_tokens=64, temperature=0.3, top_p=0.8):
 
     msg = prompt.content.split(' ')
     cmd = " ".join(msg[1:])
@@ -41,9 +41,9 @@ def kogpt_api(prompt):
         'https://api.kakaobrain.com/v1/inference/kogpt/generation',
         json = {
             'prompt': cmd,
-            'max_tokens': 30,
-            'temperature': 1.0,
-            'top_p': 1.0,
+            'max_tokens': max_tokens,
+            'temperature': temperature,
+            'top_p': top_p,
             'n': 1
         },
         headers = {
