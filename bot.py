@@ -3,7 +3,9 @@ import discord
 import loa
 import ai
 
-client = discord.Client()
+intents = discord.Intents.default()
+intents.message_content = True
+client = discord.Client(intents=intents)
 
 file = data = open('token.txt')
 token = file.readline()
@@ -77,6 +79,10 @@ async def on_message(message):
         who_search(message, 'ai')
         embed, image = ai.search(message)
         await message.channel.send(embed=embed, file=image)
+
+    elif message.content.startswith('!img'):
+        who_search(message, 'img')
+        await ai.img(message)
         
     elif message.content.startswith('!'):
         who_search(message, '로아 전적')

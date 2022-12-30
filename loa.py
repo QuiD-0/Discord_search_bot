@@ -6,7 +6,6 @@ from collections import defaultdict
 import discord
 import requests
 from bs4 import BeautifulSoup
-from lxml import etree
 
 shorcut = defaultdict()
 shorcut["전서협"] = "전국서머너홍보협회"
