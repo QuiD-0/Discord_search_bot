@@ -32,6 +32,33 @@ def search(message):
     return embed, None
 
 
+def kogpt_api(prompt):
+
+    msg = prompt.content.split(' ')
+    cmd = " ".join(msg[1:])
+
+    r = requests.post(
+        'https://api.kakaobrain.com/v1/inference/kogpt/generation',
+        json = {
+            'prompt': cmd,
+            'max_tokens': 30,
+            'temperature': 1.0,
+            'top_p': 1.0,
+            'n': 1
+        },
+        headers = {
+            'Authorization': 'KakaoAK ' + kakaoRestApiKey,
+            'Content-Type': 'application/json'
+        }
+    )
+    # 응답 JSON 형식으로 변환
+    response = json.loads(r.content)
+    embed = discord.Embed(title=cmd, color=0x000000)
+    embed.add_field(name="Answer", value=response['generations'][0]['text'], inline=True)
+
+    return embed, None
+
+
 async def img(message):
     msg = message.content.split(' ')
     cmd = " ".join(msg[1:])
@@ -70,3 +97,4 @@ def stringToImage(base64_string, mode='RGBA'):
     imgdata = base64.b64decode(str(base64_string))
     img = Image.open(io.BytesIO(imgdata)).convert(mode)
     return img
+

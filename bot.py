@@ -77,6 +77,11 @@ async def on_message(message):
         
     elif message.content.startswith('!ai'):
         who_search(message, 'ai')
+        embed, image = ai.kogpt_api(message)
+        await message.channel.send(embed=embed, file=image)
+
+    elif message.content.startswith('!oai'):
+        who_search(message, 'oai')
         embed, image = ai.search(message)
         await message.channel.send(embed=embed, file=image)
 
