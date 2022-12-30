@@ -3,9 +3,10 @@ import discord
 import loa
 import ai
 
-intents = discord.Intents.default()
-intents.message_content = True
-client = discord.Client(intents=intents)
+# intents = discord.Intents.default()
+# intents.message_content = True
+# client = discord.Client(intents=intents)
+client = discord.Client()
 
 file = data = open('token.txt')
 token = file.readline()
