@@ -35,13 +35,7 @@ async def on_message(message):
         return None
 
     if message.content.startswith('!help'):
-        embed = discord.Embed(title='입력 가능한 명령어', description="추가 문의는 재웅에게!")
-        # embed.add_field(name="롤 전적", value='!롤 [닉네임]', inline=False)
-        embed.add_field(name="로아 캐릭터 정보", value='![닉네임]', inline=False)
-        embed.add_field(name="로아 분배금", value='!쌀', inline=False)
-        embed.add_field(name="오늘의 컨텐츠", value='!오늘', inline=False)
-        embed.add_field(name="내일의 컨텐츠", value='!내일', inline=False)
-        embed.add_field(name="최신 공지사항", value='!공지', inline=False)
+        embed = getHelpEmbed()
         await message.channel.send(embed=embed)
 
     # if message.content.startswith('!롤'):
@@ -94,6 +88,17 @@ async def on_message(message):
         who_search(message, '로아 전적')
         embed, image = loa.search(message)
         await message.channel.send(embed=embed, file=image)
+
+
+def getHelpEmbed():
+    embed = discord.Embed(title='입력 가능한 명령어', description="추가 문의는 재웅에게!")
+    # embed.add_field(name="롤 전적", value='!롤 [닉네임]', inline=False)
+    embed.add_field(name="로아 캐릭터 정보", value='![닉네임]', inline=False)
+    embed.add_field(name="로아 분배금", value='!쌀', inline=False)
+    embed.add_field(name="오늘의 컨텐츠", value='!오늘', inline=False)
+    embed.add_field(name="내일의 컨텐츠", value='!내일', inline=False)
+    embed.add_field(name="최신 공지사항", value='!공지', inline=False)
+    return embed
 
 
 client.run(token)
