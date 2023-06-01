@@ -154,26 +154,3 @@ def get_notice():
                             inline=False)
 
     return embed, image
-
-
-def adventure_island():
-    urllib.request.urlretrieve("https://upload3.inven.co.kr/upload/2021/01/27/bbs/i8293549818.png", "explain.png")
-    image = discord.File("explain.png", filename="image.png")
-
-    url = 'https://loawa.com/'
-    response = requests.get(url)
-    if response.status_code == 200:
-        html = response.content.decode('utf-8', 'replace')
-        soup = BeautifulSoup(html, 'html.parser')
-        island = soup.find_all('p', {'class': 'text-theme-0 tfs15 p-0 m-0'})
-        islands = []
-        desc = []
-        for i in island:
-            islands.append(i.find('strong').get_text())
-            desc.append(i.find('span').get_text())
-        time = soup.select_one('span.text-theme-0.tfs14').get_text()
-        embed = discord.Embed(title="오늘의 모험섬", description=time, url=url, color=0x000000)
-        embed.set_thumbnail(url="attachment://image.png")
-        for i in range(len(islands)):
-            embed.add_field(name=islands[i], value=desc[i], inline=False)
-        return embed, image
