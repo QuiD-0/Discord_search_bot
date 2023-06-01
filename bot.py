@@ -1,29 +1,20 @@
 import discord
 
 import loa
-import ai
 
-# intents = discord.Intents.default()
-# intents.message_content = True
-# client = discord.Client(intents=intents)
-client = discord.Client()
+intents = discord.Intents.default()
+intents.message_content = True
+client = discord.Client(intents=intents)
 
 file = data = open('token.txt')
 token = file.readline()
 
-
 @client.event
 async def on_ready():
-    # pfp_path = "wallhaven-g7z7ld.jpg"
-    # fp = open(pfp_path, 'rb')
-    # pfp = fp.read()
-    # await client.user.edit(avatar=pfp)
-
     print("다음으로 로그인합니다")
     print(client.user.name)
     print(client.user.id)
     print("================")
-
 
 def who_search(message, s):
     print(f'{message.author}님 {s} 확인')
@@ -37,17 +28,6 @@ async def on_message(message):
     if message.content.startswith('!help'):
         embed = getHelpEmbed()
         await message.channel.send(embed=embed)
-
-    # if message.content.startswith('!롤'):
-    #     who_search(message, '롤 전적')
-    #     if len(message.content.split(' ')) != 1:
-    #         msg, image = lol.search(message)
-    #         for embed in msg:
-    #             if image:
-    #                 await message.channel.send(embed=embed, file=image)
-    #                 image = None
-    #             else:
-    #                 await message.channel.send(embed=embed)
 
     elif message.content.startswith('!쌀') or message.content.startswith('!Tkf'):
         who_search(message, '쌀')
@@ -69,21 +49,7 @@ async def on_message(message):
         who_search(message, '공지')
         embed, image = loa.get_notice()
         await message.channel.send(embed=embed, file=image)
-        
-    elif message.content.startswith('!ai'):
-        who_search(message, 'ai')
-        embed, image = ai.kogpt_api(message)
-        await message.channel.send(embed=embed, file=image)
 
-    elif message.content.startswith('!oai'):
-        who_search(message, 'oai')
-        embed, image = ai.search(message)
-        await message.channel.send(embed=embed, file=image)
-
-    elif message.content.startswith('!img'):
-        who_search(message, 'img')
-        await ai.img(message)
-        
     elif message.content.startswith('!'):
         who_search(message, '로아 전적')
         embed, image = loa.search(message)
@@ -92,7 +58,6 @@ async def on_message(message):
 
 def getHelpEmbed():
     embed = discord.Embed(title='입력 가능한 명령어', description="추가 문의는 재웅에게!")
-    # embed.add_field(name="롤 전적", value='!롤 [닉네임]', inline=False)
     embed.add_field(name="로아 캐릭터 정보", value='![닉네임]', inline=False)
     embed.add_field(name="로아 분배금", value='!쌀', inline=False)
     embed.add_field(name="오늘의 컨텐츠", value='!오늘', inline=False)
